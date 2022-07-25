@@ -5,12 +5,12 @@ variable "region" {
 
 variable "access_key" {
   description = "Access Key for AWS"
-  default = "AK"
+  default = "AKIAQJZW7KZ3U7Y7WP33"
 }
 
 variable "secret_key" {
     description = "Secret key for AWS"
-    default = "2V3h"
+    default = "F4c88mCk8DyC1pU3wj9fl/X9eysW51GRw7o59SRt"
 }
 
 variable "cluster-name"{

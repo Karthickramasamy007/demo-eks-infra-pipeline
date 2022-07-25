@@ -6,7 +6,9 @@
 #  * Route Table
 #
 
-resource "aws_vpc" "demo" {  //Created 2 VPC on same name check it.
+
+//Created 2 VPC on same name check it.
+resource "aws_vpc" "demo" {  
   cidr_block = "10.0.0.0/16"
 
   tags =tomap( {//What is map?
@@ -16,7 +18,8 @@ resource "aws_vpc" "demo" {  //Created 2 VPC on same name check it.
   )
 }
 
-resource "aws_subnet" "demo" { //Created 4 please check.
+//Created subnet.
+resource "aws_subnet" "demo" {
   count = 2
 
   availability_zone = data.aws_availability_zones.available.names[count.index]
@@ -30,6 +33,7 @@ resource "aws_subnet" "demo" { //Created 4 please check.
   }
   )
 }
+
 
 resource "aws_internet_gateway" "demo" {
   vpc_id = aws_vpc.demo.id
@@ -58,7 +62,7 @@ resource "aws_route_table_association" "demo" {
 
 
 
-#
+
 # EKS Cluster Resources
 #  * IAM Role to allow EKS service to manage other AWS services
 #  * EC2 Security Group to allow networking traffic with EKS cluster
@@ -84,17 +88,20 @@ resource "aws_iam_role" "demo-cluster" {
 POLICY
 }
 
+
 resource "aws_iam_role_policy_attachment" "demo-cluster-AmazonEKSClusterPolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
   role       = aws_iam_role.demo-cluster.name
 }
+
 
 resource "aws_iam_role_policy_attachment" "demo-cluster-AmazonEKSServicePolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSServicePolicy"
   role       = aws_iam_role.demo-cluster.name
 }
 
-resource "aws_security_group" "demo-cluster" {  // Allows All traffics orginated from this SG only.
+// Allows All traffics orginated from this SG only.
+resource "aws_security_group" "demo-cluster" { 
   name        = "terraform-eks-demo-cluster"
   description = "Cluster communication with worker nodes"
   vpc_id      = aws_vpc.demo.id
@@ -110,6 +117,7 @@ resource "aws_security_group" "demo-cluster" {  // Allows All traffics orginated
     Name = "terraform-eks-demo"
   }
 }
+
 
 resource "aws_security_group_rule" "demo-cluster-ingress-workstation-https" { //Study what is this
   cidr_blocks       = [local.workstation-external-cidr]
